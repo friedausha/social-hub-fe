@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, Grid } from '@mui/material';
 import {useNavigate} from "react-router-dom";
 
 const Login = ({ onLogin }) => {
@@ -17,45 +17,48 @@ const Login = ({ onLogin }) => {
             body: JSON.stringify({ user: { email, password } }),
         });
         const data = await response.json();
-        onLogin(data);
-        if (response.ok) {
-            navigate('/'); // Redirect to the home page
+        if (data.token) {
+            onLogin(data);
+            navigate('/')
         } else {
-            const data = await response.json();
-            console.error('Error:', data);
-            alert('Login failed failed. Please try again.');
+            alert('Login failed');
         }
     };
 
     return (
-        <Container maxWidth="sm">
-            <Typography variant="h4" gutterBottom>
-                Login
-            </Typography>
-            <form onSubmit={handleSubmit}>
-                <Box mb={2}>
+        <Container component="main" maxWidth="xs">
+            <Box mt={8} display="flex" flexDirection="column" alignItems="center">
+                <Typography component="h1" variant="h5">
+                    Login
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} mt={1}>
                     <TextField
-                        label="Email"
                         variant="outlined"
+                        margin="normal"
+                        required
                         fullWidth
+                        label="Email Address"
+                        autoComplete="email"
+                        autoFocus
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                </Box>
-                <Box mb={2}>
                     <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
                         label="Password"
                         type="password"
-                        variant="outlined"
-                        fullWidth
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    <Button type="submit" fullWidth variant="contained" color="primary">
+                        Login
+                    </Button>
                 </Box>
-                <Button type="submit" variant="contained" color="primary" fullWidth>
-                    Login
-                </Button>
-            </form>
+            </Box>
         </Container>
     );
 };

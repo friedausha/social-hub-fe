@@ -1,5 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Typography, Box, Card, CardContent, Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {
+    Container,
+    Typography,
+    Box,
+    Card,
+    CardContent,
+    Button,
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
+} from '@mui/material';
 
 const Posts = () => {
     const [posts, setPosts] = useState([]);
@@ -33,7 +46,7 @@ const Posts = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({ title: newPostTitle, content: newPostContent }),
+            body: JSON.stringify({title: newPostTitle, content: newPostContent}),
         });
         if (response.ok) {
             setIsDialogOpen(false);
@@ -68,6 +81,7 @@ const Posts = () => {
                         <CardContent>
                             <Typography variant="h5">{post.title}</Typography>
                             <Typography>{post.content}</Typography>
+                            <Typography color="textSecondary">By: {post.user.full_name}</Typography>
                             <Typography color="textSecondary">{new Date(post.created_at).toLocaleString()}</Typography>
                         </CardContent>
                     </Card>

@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import { TextField, Button, Typography, Container, Box } from '@mui/material';
 
 const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const [fullName, setFullName] = useState('');
-    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (password !== passwordConfirmation) {
-            alert("Passwords do not match");
+            alert('Passwords do not match');
             return;
         }
         const response = await fetch('http://localhost:3000/users', {
@@ -22,63 +20,69 @@ const Register = () => {
             },
             body: JSON.stringify({ user: { email, password, full_name: fullName } }),
         });
-        if (response.ok) {
-            navigate('/'); // Redirect to the home page
+        const data = await response.json();
+        console.log(data);
+        if (data.id) {
+            // Navigate to login or home page
         } else {
-            const data = await response.json();
-            console.error('Error:', data);
-            alert('Registration failed. Please try again.');
+            alert('Registration failed');
         }
     };
 
     return (
-        <Container maxWidth="sm">
-            <Typography variant="h4" gutterBottom>
-                Register
-            </Typography>
-            <form onSubmit={handleSubmit}>
-                <Box mb={2}>
+        <Container component="main" maxWidth="xs">
+            <Box mt={8} display="flex" flexDirection="column" alignItems="center">
+                <Typography component="h1" variant="h5">
+                    Register
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} mt={1}>
                     <TextField
-                        label="Full Name"
                         variant="outlined"
+                        margin="normal"
+                        required
                         fullWidth
+                        label="Full Name"
+                        autoComplete="name"
+                        autoFocus
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                     />
-                </Box>
-                <Box mb={2}>
                     <TextField
-                        label="Email"
                         variant="outlined"
+                        margin="normal"
+                        required
                         fullWidth
+                        label="Email Address"
+                        autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                </Box>
-                <Box mb={2}>
                     <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
                         label="Password"
                         type="password"
-                        variant="outlined"
-                        fullWidth
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                </Box>
-                <Box mb={2}>
                     <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
                         label="Confirm Password"
                         type="password"
-                        variant="outlined"
-                        fullWidth
                         value={passwordConfirmation}
                         onChange={(e) => setPasswordConfirmation(e.target.value)}
                     />
+                    <Button type="submit" fullWidth variant="contained" color="primary">
+                        Register
+                    </Button>
                 </Box>
-                <Button type="submit" variant="contained" color="primary" fullWidth>
-                    Register
-                </Button>
-            </form>
+            </Box>
         </Container>
     );
 };
