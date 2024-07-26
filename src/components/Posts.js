@@ -1,18 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {
-    Container,
-    Typography,
-    Box,
-    Card,
-    CardContent,
-    Button,
-    TextField,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle
-} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Container, Typography, Box, Card, CardContent, Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
 const Posts = () => {
     const [posts, setPosts] = useState([]);
@@ -23,7 +10,7 @@ const Posts = () => {
     const [newPostContent, setNewPostContent] = useState('');
 
     const fetchPosts = async (reset = false) => {
-        let url = 'http://localhost:3000/posts?limit=3';
+        let url = 'http://localhost:3000/posts?limit=5';
         if (cursor && !reset) {
             url += `&before=${cursor.before}&last_id=${cursor.last_id}`;
         }
@@ -46,7 +33,7 @@ const Posts = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify({title: newPostTitle, content: newPostContent}),
+            body: JSON.stringify({ title: newPostTitle, content: newPostContent }),
         });
         if (response.ok) {
             setIsDialogOpen(false);
